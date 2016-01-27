@@ -21,11 +21,13 @@ from time import sleep
 
 def initialize():
 	# Switch from initial state to transitory state
+	# Exception will be raised as initial device disconnects
 	try:
 		_init_one()
 	except Exception:
 		pass
 	
+	# Wait for device to actually switch over
 	sleep(1)
 	
 	# Switch from transitory state to full HID
@@ -44,6 +46,7 @@ def _init_one():
 		print("Uninitialized Thrustmaster TX not found")
 	handle.claimInterface(0)
 	
+	# Send control packet that will switch modes
 	handle.controlWrite(0x41,
 			83,
 			0x0001,
@@ -62,6 +65,7 @@ def _init_two():
 	handle.detachKernelDriver(0)
 	handle.claimInterface(0)
 	
+	# Send control packet that will switch modes
 	handle.controlWrite(0x41,
 			83,
 			0x0004,
