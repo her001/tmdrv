@@ -1,0 +1,10 @@
+tmdrv is a tool to initialize the Thrustmaster TX racing wheel as a standard
+HID device.
+
+This allows the wheel to be used in operating systems which are officially
+unsupported (only tested on Linux). Initial release is very basic, but support could
+possibly be added in the future for force feedback, other wheels, and more
+functionality.
+
+Requires that the USB device files are readable and writeable. Uses
+python-libusb1
