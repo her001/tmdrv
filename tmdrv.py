@@ -20,13 +20,15 @@ import usb1
 from time import sleep
 
 def initialize():
+	# Switch from initial state to transitory state
 	try:
 		_init_one()
 	except Exception:
 		pass
 	
-	sleep(1) 
+	sleep(1)
 	
+	# Switch from transitory state to full HID
 	try:
 		_init_two()
 	except Exception:
