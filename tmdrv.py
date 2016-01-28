@@ -24,7 +24,7 @@ def initialize():
 	# Exception will be raised as initial device disconnects
 	try:
 		_init_one()
-	except Exception:
+	except usb1.USBErrorPipe:
 		pass
 	
 	# Wait for device to actually switch over
@@ -33,7 +33,7 @@ def initialize():
 	# Switch from transitory state to full HID
 	try:
 		_init_two()
-	except Exception:
+	except usb1.USBErrorPipe:
 		pass
 
 def _init_one():
@@ -44,6 +44,8 @@ def _init_one():
 	)
 	if handle is None:
 		print("Uninitialized Thrustmaster TX not found")
+		return
+
 	handle.claimInterface(0)
 	
 	# Send control packet that will switch modes
@@ -62,6 +64,8 @@ def _init_two():
 	)
 	if handle is None:
 		print("Second stage device not found")
+		return
+
 	handle.detachKernelDriver(0)
 	handle.claimInterface(0)
 	
