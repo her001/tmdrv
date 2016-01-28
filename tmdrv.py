@@ -45,11 +45,12 @@ def _init_one():
 	if handle is None:
 		print("Uninitialized Thrustmaster TX not found")
 		return
-
+	
 	handle.claimInterface(0)
 	
 	# Send control packet that will switch modes
-	handle.controlWrite(0x41,
+	handle.controlWrite(
+			0x41,
 			83,
 			0x0001,
 			0x0000,
@@ -65,12 +66,13 @@ def _init_two():
 	if handle is None:
 		print("Second stage device not found")
 		return
-
+	
 	handle.detachKernelDriver(0)
 	handle.claimInterface(0)
 	
 	# Send control packet that will switch modes
-	handle.controlWrite(0x41,
+	handle.controlWrite(
+			0x41,
 			83,
 			0x0004,
 			0x0000,
