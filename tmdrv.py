@@ -10,73 +10,53 @@
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import usb1
+import tmdrv_devices
 from time import sleep
 
-def initialize():
-	# Switch from initial state to transitory state
-	# Exception will be raised as initial device disconnects
-	try:
-		_init_one()
-	except usb1.USBErrorPipe:
-		pass
-	
-	# Wait for device to actually switch over
-	sleep(1)
-	
-	# Switch from transitory state to full HID
-	try:
-		_init_two()
-	except usb1.USBErrorPipe:
-		pass
+def initialize(device=tmdrv_devices.thrustmaster_tx):
+	# Send all control packets for initialization
+	for m in device.control:
+		try:
+			_control_init(
+				device.idVendor, device.idProduct[m['step'] - 1],
+				m['request_type'],
+				m['request'],
+				m['value'],
+				m['index'],
+				m['data'],
+			)
+		except usb1.USBErrorPipe:
+			# This is caught when device switches modes
+			pass
+		# If there are remaining steps, give device time to switch
+		if m['step'] < len(m): sleep(1)
 
-def _init_one():
+def _control_init(idVendor, idProduct, request_type, request, value, index, data):
 	context = usb1.USBContext()
 	handle = context.openByVendorIDAndProductID(
-			0x044f, 0xb664,
-			skip_on_error=True,
+		idVendor, idProduct,
+		skip_on_error=True,
 	)
 	if handle is None:
-		print("Uninitialized Thrustmaster TX not found")
+		print('Device ' + idVendor + ', ' + idProduct + ' not found or wrong permissions')
 		return
-	
+	handle.seAutoDetachKernelDriver(true)
 	handle.claimInterface(0)
 	
 	# Send control packet that will switch modes
 	handle.controlWrite(
-			0x41,
-			83,
-			0x0001,
-			0x0000,
-			b'',
-	)
-
-def _init_two():
-	context = usb1.USBContext()
-	handle = context.openByVendorIDAndProductID(
-			0x044f, 0xb65d,
-			skip_on_error=True,
-	)
-	if handle is None:
-		print("Second stage device not found")
-		return
-	
-	handle.detachKernelDriver(0)
-	handle.claimInterface(0)
-	
-	# Send control packet that will switch modes
-	handle.controlWrite(
-			0x41,
-			83,
-			0x0004,
-			0x0000,
-			b'',
+		0x41,
+		83,
+		0x0001,
+		0x0000,
+		b'',
 	)
 
 if __name__ == '__main__':
