@@ -47,7 +47,7 @@ def _control_init(idVendor, idProduct, request_type, request, value, index, data
 	if handle is None:
 		print('Device ' + idVendor + ', ' + idProduct + ' not found or wrong permissions')
 		return
-	handle.seAutoDetachKernelDriver(true)
+	handle.setAutoDetachKernelDriver(true)
 	handle.claimInterface(0)
 	
 	# Send control packet that will switch modes
