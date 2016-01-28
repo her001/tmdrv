@@ -52,11 +52,11 @@ def _control_init(idVendor, idProduct, request_type, request, value, index, data
 	
 	# Send control packet that will switch modes
 	handle.controlWrite(
-		0x41,
-		83,
-		0x0001,
-		0x0000,
-		b'',
+		request_type,
+		request,
+		value,
+		index,
+		data,
 	)
 
 if __name__ == '__main__':
