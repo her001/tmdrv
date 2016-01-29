@@ -34,7 +34,7 @@ def initialize(device=thrustmaster_tx):
 				m['data'],
 			)
 		except usb1.USBErrorNotFound:
-			print('Error getting handle for device {:0=4x}:{:0=4x}.'.format(device.idVendor, device.idProduct[m['step']-1]))
+			print('Error getting handle for device {:0=4x}:{:0=4x} ({} Step {}).'.format(device.idVendor, device.idProduct[m['step']-1], device.name, m['step']))
 			raise
 		except usb1.USBErrorNoDevice:
 			# This is caught when device switches modes
