@@ -1,1 +1,1 @@
-import thrustmaster_tx
+__all__ = ['thrustmaster_tx']

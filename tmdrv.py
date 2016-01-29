@@ -17,10 +17,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import usb1
-import tmdrv_devices
+from tmdrv_devices import *
 from time import sleep
+from subprocess import check_call
 
-def initialize(device=tmdrv_devices.thrustmaster_tx):
+def initialize(device=thrustmaster_tx):
 	# Send all control packets for initialization
 	for m in device.control:
 		try:
@@ -32,11 +33,17 @@ def initialize(device=tmdrv_devices.thrustmaster_tx):
 				m['index'],
 				m['data'],
 			)
-		except usb1.USBErrorPipe:
+		except usb1.USBErrorNoDevice:
 			# This is caught when device switches modes
 			pass
 		# If there are remaining steps, give device time to switch
 		if m['step'] < len(m): sleep(1)
+	
+	# Load configuration to remove deadzones
+	jscal(device.jscal, "/dev/input/by-id/" + device.dev_by_id)
+
+def jscal(configuration, device_file):
+	check_call(['jscal', '-s', configuration, device_file])
 
 def _control_init(idVendor, idProduct, request_type, request, value, index, data):
 	context = usb1.USBContext()
@@ -45,9 +52,9 @@ def _control_init(idVendor, idProduct, request_type, request, value, index, data
 		skip_on_error=True,
 	)
 	if handle is None:
-		print('Device ' + idVendor + ', ' + idProduct + ' not found or wrong permissions')
+		print('Device ' + str(idVendor) + ', ' + str(idProduct) + ' not found or wrong permissions')
 		return
-	handle.setAutoDetachKernelDriver(true)
+	handle.setAutoDetachKernelDriver(True)
 	handle.claimInterface(0)
 	
 	# Send control packet that will switch modes
