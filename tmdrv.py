@@ -33,11 +33,13 @@ def initialize(device=thrustmaster_tx):
 				m['index'],
 				m['data'],
 			)
+		except usb1.USBErrorNotFound:
+			print('Error getting handle for device {:0=4x}:{:0=4x}.'.format(device.idVendor, device.idProduct[m['step']-1]))
+			raise
 		except usb1.USBErrorNoDevice:
 			# This is caught when device switches modes
-			pass
-		# If there are remaining steps, give device time to switch
-		if m['step'] < len(m): sleep(1)
+			# If there are remaining steps, give device time to switch
+			if m['step'] < len(m): sleep(1)
 	
 	# Load configuration to remove deadzones
 	jscal(device.jscal, "/dev/input/by-id/" + device.dev_by_id)
@@ -49,11 +51,9 @@ def _control_init(idVendor, idProduct, request_type, request, value, index, data
 	context = usb1.USBContext()
 	handle = context.openByVendorIDAndProductID(
 		idVendor, idProduct,
-		skip_on_error=True,
 	)
 	if handle is None:
-		print('Device ' + str(idVendor) + ', ' + str(idProduct) + ' not found or wrong permissions')
-		return
+		raise usb1.USBErrorNotFound('Device not found or wrong permissions')
 	handle.setAutoDetachKernelDriver(True)
 	handle.claimInterface(0)
 	
