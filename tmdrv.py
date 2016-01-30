@@ -18,7 +18,6 @@
 
 import usb1
 from tmdrv_devices import *
-from time import sleep
 from subprocess import check_call
 
 def initialize(device=thrustmaster_tx):
@@ -38,8 +37,17 @@ def initialize(device=thrustmaster_tx):
 			raise
 		except usb1.USBErrorNoDevice:
 			# This is caught when device switches modes
-			# If there are remaining steps, give device time to switch
-			if m['step'] < len(m): sleep(1)
+			pass
+		
+		# If there are remaining steps, wait for device to switch
+		if m['step'] < len(m):
+			w = True
+			while w:
+				handle = context.openByVendorIDAndProductID(
+					device.idVendor, device.idProduct[m['step']],
+				)
+				if handle is not None:
+					w = False
 	
 	# Load configuration to remove deadzones
 	jscal(device.jscal, "/dev/input/by-id/" + device.dev_by_id)
@@ -48,7 +56,6 @@ def jscal(configuration, device_file):
 	check_call(['jscal', '-s', configuration, device_file])
 
 def _control_init(idVendor, idProduct, request_type, request, value, index, data):
-	context = usb1.USBContext()
 	handle = context.openByVendorIDAndProductID(
 		idVendor, idProduct,
 	)
@@ -65,6 +72,8 @@ def _control_init(idVendor, idProduct, request_type, request, value, index, data
 		index,
 		data,
 	)
+
+context = usb1.USBContext()
 
 if __name__ == '__main__':
 	initialize()
