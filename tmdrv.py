@@ -54,6 +54,10 @@ def initialize(device=thrustmaster_tx):
 	if device.jscal is not None:
 		_jscal(device.jscal, "/dev/input/by-id/" + device.dev_by_id)
 
+def get_devices():
+	from tmdrv_devices import __all__
+	return __all__
+
 def _jscal(configuration, device_file):
 	check_call(['jscal', '-s', configuration, device_file])
 
@@ -81,6 +85,12 @@ if __name__ == '__main__':
 	import argparse
 	
 	parser = argparse.ArgumentParser(description=__doc__)
+	parser.add_argument('-D', '--devices', action='store_true',
+		help='List all supported devices')
 	args = parser.parse_args()
-	
-	initialize()
+
+	if args.devices:
+		for d in get_devices():
+			print(d)
+	else:
+    		initialize()
