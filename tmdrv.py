@@ -51,9 +51,10 @@ def initialize(device=thrustmaster_tx):
 					w = False
 	
 	# Load configuration to remove deadzones
-	jscal(device.jscal, "/dev/input/by-id/" + device.dev_by_id)
+	if device.jscal is not None:
+		_jscal(device.jscal, "/dev/input/by-id/" + device.dev_by_id)
 
-def jscal(configuration, device_file):
+def _jscal(configuration, device_file):
 	check_call(['jscal', '-s', configuration, device_file])
 
 def _control_init(idVendor, idProduct, request_type, request, value, index, data):
