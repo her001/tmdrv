@@ -90,6 +90,8 @@ if __name__ == '__main__':
 	import argparse
 	
 	parser = argparse.ArgumentParser(description=__doc__)
+	parser.add_argument('-d', '--device', default='thrustmaster_tx',
+		help='Specify device to use')
 	parser.add_argument('-D', '--supported-devices', action='store_true',
 		help='List all supported devices')
 	args = parser.parse_args()
@@ -98,4 +100,4 @@ if __name__ == '__main__':
 		for d in get_devices():
 			print(d)
 	else:
-    		initialize()
+		initialize(args.device)
