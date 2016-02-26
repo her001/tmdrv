@@ -89,7 +89,7 @@ if __name__ == '__main__':
 		help='List all supported devices')
 	args = parser.parse_args()
 	
-	if args.supported-devices:
+	if args.supported_devices:
 		for d in get_devices():
 			print(d)
 	else:
