@@ -27,6 +27,12 @@ def initialize(device_name='thrustmaster_tx'):
 		if s == 'tmdrv_devices.' + device_name:
 			device = sys.modules[s]
 	
+	try:
+		device
+	except UnboundLocalError:
+		print('Device name ' + device_name + ' is invalid.')
+		raise
+	
 	# Send all control packets for initialization
 	for m in device.control:
 		try:
