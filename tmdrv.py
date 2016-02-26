@@ -21,7 +21,12 @@ import usb1
 from tmdrv_devices import *
 from subprocess import check_call
 
-def initialize(device=thrustmaster_tx):
+def initialize(device_name='thrustmaster_tx'):
+	import sys
+	for s in sys.modules.keys():
+		if s == 'tmdrv_devices.' + device_name:
+			device = sys.modules[s]
+	
 	# Send all control packets for initialization
 	for m in device.control:
 		try:
