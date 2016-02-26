@@ -85,11 +85,11 @@ if __name__ == '__main__':
 	import argparse
 	
 	parser = argparse.ArgumentParser(description=__doc__)
-	parser.add_argument('-D', '--devices', action='store_true',
+	parser.add_argument('-D', '--supported-devices', action='store_true',
 		help='List all supported devices')
 	args = parser.parse_args()
-
-	if args.devices:
+	
+	if args.supported-devices:
 		for d in get_devices():
 			print(d)
 	else:
