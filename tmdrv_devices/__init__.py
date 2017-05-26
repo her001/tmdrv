@@ -1,1 +1,1 @@
-__all__ = ['thrustmaster_tx']
+__all__ = ['thrustmaster_tx', 'thrustmaster_t500rs']
