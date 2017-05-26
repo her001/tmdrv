@@ -50,6 +50,8 @@ def initialize(device_name='thrustmaster_tx'):
 		except usb1.USBErrorNoDevice:
 			# This is caught when device switches modes
 			pass
+		except usb1.USBErrorIO:  # dirty hack
+			pass
 		
 		# If there are remaining steps, wait for device to switch
 		if m['step'] < len(m):
