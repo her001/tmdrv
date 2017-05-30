@@ -52,6 +52,36 @@ with the following information:
 (such as with [USBPcap](http://desowin.org/usbpcap) on Windows or a Virtual
 Machine on Linux and [Wireshark](https://wiki.wireshark.org/CaptureSetup/USB))
 
-If it is determined that your device can be added to tmdrv, you will need to
-test the support and provide a jscal preset (for eliminating deadzones).
+If it is determined that your device can be added to tmdrv, it would be helpful
+to test the support and provide a jscal preset (for eliminating deadzones).
+
+In the case that you are having trouble providing all the requested information,
+please feel free to open an issue with that which you do know, and I will do my
+best to walk you through providing the rest.
+
+#### Possible signs that your Thrustmaster wheel can be added to tmdrv
+
+tmdrv uses a very simple and specific method of sending a message to the wheel
+which switches it to various modes. These modes may be the same for each one,
+so the following is my observations of the patterns, but it is possible that
+some devices have different behaviors or that I am wrong:
+
+* Supports a console and PC via USB connection
+* Relatively recent (possibly only Playstation 4 and Xbox One supporting wheels)
+
+##### Playstation 4 wheels when plugged in to a Linux machine
+
+* USB product ID of `b65d`
+* Device name of `Thrustmaster FFB Wheel`
+* Appears as a working joystick, but the configuration is incorrect,
+including buttons wrongly assigned and pedals acting as buttons
+
+##### Xbox One wheels when plugged in to a Linux machine
+
+* USB product ID is **not** `b65d` (probably)
+* Does not show as an HID device of any sort, not found in
+joystick-supporting software
+
+With more data, these guidelines can almost definitely be made more accurate,
+but I've only seen limited information on a few devices!
 
