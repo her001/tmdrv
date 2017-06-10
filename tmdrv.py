@@ -23,7 +23,7 @@ import usb1
 from importlib import import_module
 from subprocess import check_call
 
-device_list = ['thrustmaster_tx', 'thrustmaster_t500rs']
+device_list = ['thrustmaster_t300rs', 'thrustmaster_t500rs', 'thrustmaster_tx']
 
 def initialize(device_name='thrustmaster_tx'):
 	device = import_module('tmdrv_devices.' + device_name)
