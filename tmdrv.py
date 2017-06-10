@@ -48,9 +48,15 @@ def initialize(device_name='thrustmaster_tx'):
 			print('Error getting handle for device {:0=4x}:{:0=4x} ({} Step {}).'.format(device.idVendor, device.idProduct[m['step']-1], device.name, m['step']))
 			raise
 		except usb1.USBErrorNoDevice:
-			# This is caught when device switches modes
+			# Caught when device switches modes
 			pass
-		except usb1.USBErrorIO:  # dirty hack
+		except usb1.USBErrorPipe:
+			# Possibly caught when device switches modes on older libusb
+			pass
+		except usb1.USBErrorIO:
+			# Possibly caught when device switches modes on newer
+			# libusb. This still has to be investigated, there might
+			# be another issue going on here.
 			pass
 		
 		# If there are remaining steps, wait for device to switch
