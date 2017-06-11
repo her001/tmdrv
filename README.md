@@ -17,6 +17,8 @@ for details.
 * Thrustmaster T500RS
 * Thrustmaster TX
 
+See the status of additional devices on
+[GitHub Projects](https://github.com/her001/tmdrv/projects/1).
 
 ## Requirements
 
@@ -43,8 +45,10 @@ Issues or pull requests can be filed on the GitHub
 ### Adding support for new devices
 
 Other wheels which use the same method for initialization can be added to tmdrv
-relatively easily. If you have a device that you think will work, file an issue
-with the following information:
+relatively easily. If you have a device that you think will work, please file an
+issue (or add to the existing issue for your device, if it
+[already exists](https://github.com/her001/tmdrv/labels/new%20device)) with the
+following information:
 
 * The name of the device (e.g. Thrustmaster TX)
 * The vendor and product USB IDs (e.g. 044f:b65d)
