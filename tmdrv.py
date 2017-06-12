@@ -17,15 +17,16 @@
 
 """Tool to initialize Thrustmaster racing wheels."""
 
+import argparse
+import tmdrv_devices
 import usb1
-from tmdrv_devices import *
+from importlib import import_module
 from subprocess import check_call
 
+device_list = ['thrustmaster_tx', 'thrustmaster_t500rs']
+
 def initialize(device_name='thrustmaster_tx'):
-	import sys
-	for s in sys.modules.keys():
-		if s == 'tmdrv_devices.' + device_name:
-			device = sys.modules[s]
+	device = import_module('tmdrv_devices.' + device_name)
 	
 	try:
 		device
@@ -74,8 +75,7 @@ def initialize(device_name='thrustmaster_tx'):
 		_jscal(device.jscal, "/dev/input/by-id/" + device.dev_by_id)
 
 def get_devices():
-	from tmdrv_devices import __all__
-	return __all__
+	return device_list
 
 def _jscal(configuration, device_file):
 	check_call(['jscal', '-s', configuration, device_file])
@@ -101,8 +101,6 @@ def _control_init(idVendor, idProduct, request_type, request, value, index, data
 context = usb1.USBContext()
 
 if __name__ == '__main__':
-	import argparse
-	
 	parser = argparse.ArgumentParser(description=__doc__)
 	parser.add_argument('-d', '--device', default='thrustmaster_tx',
 		help='Specify device to use')
