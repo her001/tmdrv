@@ -78,7 +78,12 @@ def get_devices():
 	return device_list
 
 def _jscal(configuration, device_file):
-	check_call(['jscal', '-s', configuration, device_file])
+	try:
+		check_call(['jscal', '-s', configuration, device_file])
+	except FileNotFoundError:
+		print("jscal not found, skipping device calibration.")
+	except subprocess.CalledProcessError as err:
+		print("jscal non-zero exit code {}, device may not be calibrated".format(str(err)[-1]))
 
 def _control_init(idVendor, idProduct, request_type, request, value, index, data):
 	handle = context.openByVendorIDAndProductID(
