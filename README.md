@@ -39,6 +39,9 @@ For more information, try `./tmdrv.py --help`.
 
 ## Contributing
 
+By participating in tmdrv, you agree to the terms set forth by the
+Contributor Covenant. See `CODE_OF_CONDUCT.md` for details.
+
 Issues or pull requests can be filed on the GitHub
 [issue tracker](https://github.com/her001/tmdrv/issues).
 
