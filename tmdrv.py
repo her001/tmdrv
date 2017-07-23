@@ -23,17 +23,17 @@ import usb1
 from importlib import import_module
 from subprocess import check_call
 
-device_list = ['thrustmaster_tx', 'thrustmaster_t500rs']
+device_list = ['thrustmaster_tx', 'thrustmaster_tmx_ff', 'thrustmaster_t500rs']
 
 def initialize(device_name='thrustmaster_tx'):
 	device = import_module('tmdrv_devices.' + device_name)
-	
+
 	try:
 		device
 	except UnboundLocalError:
 		print('Device name ' + device_name + ' is invalid.')
 		raise
-	
+
 	# Send all control packets for initialization
 	for m in device.control:
 		try:
@@ -59,7 +59,7 @@ def initialize(device_name='thrustmaster_tx'):
 			# libusb. This still has to be investigated, there might
 			# be another issue going on here.
 			pass
-		
+
 		# If there are remaining steps, wait for device to switch
 		if m['step'] < len(m):
 			w = True
@@ -69,7 +69,7 @@ def initialize(device_name='thrustmaster_tx'):
 				)
 				if handle is not None:
 					w = False
-	
+
 	# Load configuration to remove deadzones
 	if device.jscal is not None:
 		_jscal(device.jscal, "/dev/input/by-id/" + device.dev_by_id)
@@ -90,7 +90,7 @@ def _control_init(idVendor, idProduct, request_type, request, value, index, data
 		raise usb1.USBErrorNotFound('Device not found or wrong permissions')
 	handle.setAutoDetachKernelDriver(True)
 	handle.claimInterface(0)
-	
+
 	# Send control packet that will switch modes
 	handle.controlWrite(
 		request_type,
@@ -109,7 +109,7 @@ if __name__ == '__main__':
 	parser.add_argument('-D', '--supported-devices', action='store_true',
 		help='List all supported devices')
 	args = parser.parse_args()
-	
+
 	if args.supported_devices:
 		for d in device_list:
 			print(d)
