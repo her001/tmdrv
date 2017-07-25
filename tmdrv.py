@@ -21,7 +21,7 @@ import argparse
 import tmdrv_devices
 import usb1
 from importlib import import_module
-from subprocess import check_call
+from subprocess import check_call, CalledProcessError
 
 device_list = ['thrustmaster_tx', 'thrustmaster_tmx', 'thrustmaster_t500rs']
 
@@ -79,7 +79,7 @@ def _jscal(configuration, device_file):
 		check_call(['jscal', '-s', configuration, device_file])
 	except FileNotFoundError:
 		print("jscal not found, skipping device calibration.")
-	except subprocess.CalledProcessError as err:
+	except CalledProcessError as err:
 		print("jscal non-zero exit code {}, device may not be calibrated".format(str(err)[-1]))
 
 def _control_init(idVendor, idProduct, request_type, request, value, index, data):
