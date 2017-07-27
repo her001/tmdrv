@@ -24,9 +24,7 @@ See the status of additional devices on
 
 * [Python 3](https://www.python.org)
 * [python-libusb1](https://pypi.python.org/pypi/libusb1)
-* jscal 
- - Ubuntu: sudo apt install joystick
- - Other Distro's: compile from source from [Linux Console](https://sourceforge.net/projects/linuxconsole),
+* jscal (from [Linux Console](https://sourceforge.net/projects/linuxconsole),
 for calibration) 
 
 
