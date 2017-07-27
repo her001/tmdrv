@@ -18,20 +18,27 @@
 """Tool to initialize Thrustmaster racing wheels."""
 
 import argparse
+import time
 import tmdrv_devices
 import usb1
 from importlib import import_module
+from os import path
 from subprocess import check_call, CalledProcessError
 
 device_list = ['thrustmaster_tx', 'thrustmaster_tmx', 'thrustmaster_t500rs']
+_context = usb1.USBContext()
 
 def initialize(device_name='thrustmaster_tx'):
-	device = import_module('tmdrv_devices.' + device_name)
+	try:
+		device = import_module('tmdrv_devices.' + device_name)
+	except ModuleNotFoundError:
+		print('Device name "' + device_name + '" is invalid.')
+		raise
 
 	try:
 		device
 	except UnboundLocalError:
-		print('Device name ' + device_name + ' is invalid.')
+		print('Device name "' + device_name + '" is invalid.')
 		raise
 
 	# Send all control packets for initialization
@@ -63,7 +70,7 @@ def initialize(device_name='thrustmaster_tx'):
 		# Wait for device to switch
 		connected = False
 		while not connected:
-			handle = context.openByVendorIDAndProductID(
+			handle = _context.openByVendorIDAndProductID(
 				device.idVendor, device.idProduct[m['step']],
 			)
 			if handle is not None:
@@ -71,18 +78,28 @@ def initialize(device_name='thrustmaster_tx'):
 
 	# Load configuration to remove deadzones
 	if device.jscal is not None:
-		_jscal(device.jscal, "/dev/input/by-id/" + device.dev_by_id)
+		dev_path = '/dev/input/by-id/' + device.dev_by_id
+		# Sometimes the device symlink is not ready in time, so we wait
+		n = 9
+		while not path.islink(dev_path):
+			if n > 0:
+				time.sleep(.5)
+				n -= 1
+			else:
+				print('Device "{}" not found, skipping device calibration'.format(dev_path))
+				raise FileNotFoundError
+		_jscal(device.jscal, dev_path)
 
 def _jscal(configuration, device_file):
 	try:
 		check_call(['jscal', '-s', configuration, device_file])
 	except FileNotFoundError:
-		print("jscal not found, skipping device calibration.")
+		print('jscal not found, skipping device calibration.')
 	except CalledProcessError as err:
-		print("jscal non-zero exit code {}, device may not be calibrated".format(str(err)[-1]))
+		print('jscal non-zero exit code {}, device may not be calibrated'.format(str(err)[-1]))
 
 def _control_init(idVendor, idProduct, request_type, request, value, index, data):
-	handle = context.openByVendorIDAndProductID(
+	handle = _context.openByVendorIDAndProductID(
 		idVendor, idProduct,
 	)
 	if handle is None:
@@ -98,8 +115,6 @@ def _control_init(idVendor, idProduct, request_type, request, value, index, data
 		index,
 		data,
 	)
-
-context = usb1.USBContext()
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description=__doc__)
