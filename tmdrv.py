@@ -60,15 +60,14 @@ def initialize(device_name='thrustmaster_tx'):
 			# be another issue going on here.
 			pass
 		
-		# If there are remaining steps, wait for device to switch
-		if m['step'] < len(m):
-			w = True
-			while w:
-				handle = context.openByVendorIDAndProductID(
-					device.idVendor, device.idProduct[m['step']],
-				)
-				if handle is not None:
-					w = False
+		# Wait for device to switch
+		connected = False
+		while not connected:
+			handle = context.openByVendorIDAndProductID(
+				device.idVendor, device.idProduct[m['step']],
+			)
+			if handle is not None:
+				connected = True
 	
 	# Load configuration to remove deadzones
 	if device.jscal is not None:
