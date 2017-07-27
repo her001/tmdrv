@@ -72,15 +72,15 @@ def initialize(device_name='thrustmaster_tx'):
 	
 	# Load configuration to remove deadzones
 	if device.jscal is not None:
-		_jscal(device.jscal, "/dev/input/by-id/" + device.dev_by_id)
+		_jscal(device.jscal, '/dev/input/by-id/' + device.dev_by_id)
 
 def _jscal(configuration, device_file):
 	try:
 		check_call(['jscal', '-s', configuration, device_file])
 	except FileNotFoundError:
-		print("jscal not found, skipping device calibration.")
+		print('jscal not found, skipping device calibration.')
 	except subprocess.CalledProcessError as err:
-		print("jscal non-zero exit code {}, device may not be calibrated".format(str(err)[-1]))
+		print('jscal non-zero exit code {}, device may not be calibrated'.format(str(err)[-1]))
 
 def _control_init(idVendor, idProduct, request_type, request, value, index, data):
 	handle = _context.openByVendorIDAndProductID(
