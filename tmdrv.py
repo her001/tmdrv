@@ -23,9 +23,9 @@ import tmdrv_devices
 import usb1
 from importlib import import_module
 from os import path
-from subprocess import check_call
+from subprocess import check_call, CalledProcessError
 
-device_list = ['thrustmaster_tx', 'thrustmaster_t500rs']
+device_list = ['thrustmaster_tx', 'thrustmaster_tmx', 'thrustmaster_t500rs']
 _context = usb1.USBContext()
 
 def initialize(device_name='thrustmaster_tx'):
@@ -34,13 +34,13 @@ def initialize(device_name='thrustmaster_tx'):
 	except ModuleNotFoundError:
 		print('Device name "' + device_name + '" is invalid.')
 		raise
-	
+
 	try:
 		device
 	except UnboundLocalError:
 		print('Device name "' + device_name + '" is invalid.')
 		raise
-	
+
 	# Send all control packets for initialization
 	for m in device.control:
 		try:
@@ -66,7 +66,7 @@ def initialize(device_name='thrustmaster_tx'):
 			# libusb. This still has to be investigated, there might
 			# be another issue going on here.
 			pass
-		
+
 		# Wait for device to switch
 		connected = False
 		while not connected:
@@ -75,7 +75,7 @@ def initialize(device_name='thrustmaster_tx'):
 			)
 			if handle is not None:
 				connected = True
-	
+
 	# Load configuration to remove deadzones
 	if device.jscal is not None:
 		dev_path = '/dev/input/by-id/' + device.dev_by_id
@@ -95,7 +95,7 @@ def _jscal(configuration, device_file):
 		check_call(['jscal', '-s', configuration, device_file])
 	except FileNotFoundError:
 		print('jscal not found, skipping device calibration.')
-	except subprocess.CalledProcessError as err:
+	except CalledProcessError as err:
 		print('jscal non-zero exit code {}, device may not be calibrated'.format(str(err)[-1]))
 
 def _control_init(idVendor, idProduct, request_type, request, value, index, data):
@@ -106,7 +106,7 @@ def _control_init(idVendor, idProduct, request_type, request, value, index, data
 		raise usb1.USBErrorNotFound('Device not found or wrong permissions')
 	handle.setAutoDetachKernelDriver(True)
 	handle.claimInterface(0)
-	
+
 	# Send control packet that will switch modes
 	handle.controlWrite(
 		request_type,
@@ -123,7 +123,7 @@ if __name__ == '__main__':
 	parser.add_argument('-D', '--supported-devices', action='store_true',
 		help='List all supported devices')
 	args = parser.parse_args()
-	
+
 	if args.supported_devices:
 		for d in device_list:
 			print(d)

@@ -16,7 +16,7 @@ for details.
 
 * Thrustmaster T500RS
 * Thrustmaster TX
-
+* Thrustmaster TMX
 See the status of additional devices on
 [GitHub Projects](https://github.com/her001/tmdrv/projects/1).
 
@@ -24,8 +24,8 @@ See the status of additional devices on
 
 * [Python 3](https://www.python.org)
 * [python-libusb1](https://pypi.python.org/pypi/libusb1)
-* jscal (from [Linux Console](https://sourceforge.net/projects/linuxconsole),
-for calibration)
+* jscal (from [Linux Console](https://sourceforge.net/projects/linuxconsole), for calibration) 
+
 
 The USB device files must be readable and writeable. I recommend setting a udev
 rule for this.
