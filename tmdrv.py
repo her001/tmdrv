@@ -24,6 +24,7 @@ from importlib import import_module
 from subprocess import check_call
 
 device_list = ['thrustmaster_tx', 'thrustmaster_t500rs']
+_context = usb1.USBContext()
 
 def initialize(device_name='thrustmaster_tx'):
 	device = import_module('tmdrv_devices.' + device_name)
@@ -63,7 +64,7 @@ def initialize(device_name='thrustmaster_tx'):
 		# Wait for device to switch
 		connected = False
 		while not connected:
-			handle = context.openByVendorIDAndProductID(
+			handle = _context.openByVendorIDAndProductID(
 				device.idVendor, device.idProduct[m['step']],
 			)
 			if handle is not None:
@@ -82,7 +83,7 @@ def _jscal(configuration, device_file):
 		print("jscal non-zero exit code {}, device may not be calibrated".format(str(err)[-1]))
 
 def _control_init(idVendor, idProduct, request_type, request, value, index, data):
-	handle = context.openByVendorIDAndProductID(
+	handle = _context.openByVendorIDAndProductID(
 		idVendor, idProduct,
 	)
 	if handle is None:
@@ -98,8 +99,6 @@ def _control_init(idVendor, idProduct, request_type, request, value, index, data
 		index,
 		data,
 	)
-
-context = usb1.USBContext()
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description=__doc__)
