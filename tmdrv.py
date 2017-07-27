@@ -27,12 +27,16 @@ device_list = ['thrustmaster_tx', 'thrustmaster_t500rs']
 _context = usb1.USBContext()
 
 def initialize(device_name='thrustmaster_tx'):
-	device = import_module('tmdrv_devices.' + device_name)
+	try:
+		device = import_module('tmdrv_devices.' + device_name)
+	except ModuleNotFoundError:
+		print('Device name "' + device_name + '" is invalid.')
+		raise
 	
 	try:
 		device
 	except UnboundLocalError:
-		print('Device name ' + device_name + ' is invalid.')
+		print('Device name "' + device_name + '" is invalid.')
 		raise
 	
 	# Send all control packets for initialization
