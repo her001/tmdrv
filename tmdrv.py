@@ -18,9 +18,11 @@
 """Tool to initialize Thrustmaster racing wheels."""
 
 import argparse
+import time
 import tmdrv_devices
 import usb1
 from importlib import import_module
+from os import path
 from subprocess import check_call
 
 device_list = ['thrustmaster_tx', 'thrustmaster_t500rs']
@@ -76,7 +78,17 @@ def initialize(device_name='thrustmaster_tx'):
 	
 	# Load configuration to remove deadzones
 	if device.jscal is not None:
-		_jscal(device.jscal, '/dev/input/by-id/' + device.dev_by_id)
+		dev_path = '/dev/input/by-id/' + device.dev_by_id
+		# Sometimes the device symlink is not ready in time, so we wait
+		n = 9
+		while not path.islink(dev_path):
+			if n > 0:
+				time.sleep(.5)
+				n -= 1
+			else:
+				print('Device "{}" not found, skipping device calibration'.format(dev_path))
+				raise FileNotFoundError
+		_jscal(device.jscal, dev_path)
 
 def _jscal(configuration, device_file):
 	try:
