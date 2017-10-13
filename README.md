@@ -24,7 +24,7 @@ See the status of additional devices on
 ## Requirements
 
 * [Python 3](https://www.python.org)
-* [python-libusb1](https://pypi.python.org/pypi/libusb1)
+* [python-libusb1](https://pypi.python.org/pypi/libusb1) (must work with your Python 3 install)
 * jscal (from [Linux Console](https://sourceforge.net/projects/linuxconsole),
 for calibration)
 
