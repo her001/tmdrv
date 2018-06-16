@@ -1,4 +1,4 @@
-# [tmdrv](https://github.com/her001/tmdrv)
+# [tmdrv](https://gitlab.com/her0/tmdrv)
 
 Copyright © 2016, 2017 Andrew "HER0" Conrad
 
@@ -18,8 +18,8 @@ for details.
 * Thrustmaster TX
 * Thrustmaster TMX
 
-See the status of additional devices on
-[GitHub Projects](https://github.com/her001/tmdrv/projects/1).
+See the status of additional devices on the GitLab
+[board](https://gitlab.com/her0/tmdrv/boards?=&label_name[]=new%20device).
 
 ## Requirements
 
@@ -44,15 +44,15 @@ For more information, try `./tmdrv.py --help`.
 By participating in tmdrv, you agree to the terms set forth by the
 Contributor Covenant. See `CODE_OF_CONDUCT.md` for details.
 
-Issues or pull requests can be filed on the GitHub
-[issue tracker](https://github.com/her001/tmdrv/issues).
+Issues or pull requests can be filed on the GitLab
+[issue tracker](https://gitlab.com/her0/tmdrv/issues).
 
 ### Adding support for new devices
 
 Other wheels which use the same method for initialization can be added to tmdrv
 relatively easily. If you have a device that you think will work, please file an
 issue (or add to the existing issue for your device, if it
-[already exists](https://github.com/her001/tmdrv/labels/new%20device)) with the
+[already exists](https://gitlab.com/her0/tmdrv/issues?label_name%5B%5D=new+device)) with the
 following information:
 
 * The name of the device (e.g. Thrustmaster TX)
