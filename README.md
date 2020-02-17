@@ -17,6 +17,7 @@ for details.
 * Thrustmaster T500RS
 * Thrustmaster TX
 * Thrustmaster TMX
+* Thrustmaster TS-XW
 
 See the status of additional devices on the GitLab
 [board](https://gitlab.com/her0/tmdrv/boards?=&label_name[]=new%20device).
