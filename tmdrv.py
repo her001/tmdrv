@@ -25,7 +25,7 @@ from importlib import import_module
 from os import path
 from subprocess import check_call, CalledProcessError
 
-device_list = ['thrustmaster_t500rs', 'thrustmaster_tmx', 'thrustmaster_tx']
+device_list = ['thrustmaster_t500rs', 'thrustmaster_tmx', 'thrustmaster_tx', 'thrustmaster_tsxw']
 _context = usb1.USBContext()
 
 def initialize(device_name='thrustmaster_tx'):
